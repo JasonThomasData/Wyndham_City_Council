@@ -1,7 +1,7 @@
 require 'scraperwiki'
 require 'mechanize'
 
-def get_content(page, url)
+def get_content(page)
   #Returns html tree and the number of paginated links
   table_of_applications = page.search("table#ctl00_Content_cusResultsGrid_repWebGrid_ctl00_grdWebGridTabularView")
   table_rows = table_of_applications.search('tr')
@@ -46,7 +46,7 @@ agent = Mechanize.new
 
 #The initial scrape, this returns the first table of data and the number of pages to enter in form
 page = agent.get(url)
-table_rows, page_link_number = get_content(page, url)
+table_rows, page_link_number = get_content(page)
 save_table_data(table_rows, url)
 
 (2..page_link_number.to_i).each do |i|
