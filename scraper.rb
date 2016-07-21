@@ -22,11 +22,15 @@ def save_table_data(table_rows, url)
     council_reference = tr.search("td")[0].inner_text
     link_to_decision = "https://eproperty.wyndham.vic.gov.au/ePropertyPROD/P1/eTrack/eTrackApplicationDetails.aspx?r=P1.WEBGUEST&f=%24P1.ETR.APPDET.VIW&ApplicationId=#{council_reference}"
 
+    date_received_unformatted = tr.search("td")[1].inner_text
+    day, month, year = date_received_unformatted.split("/")
+    date_received_formatted = "#{year}-#{month}-#{day}"
+
     record = {
       "info_url" => link_to_decision,
       "comment_url" => link_to_decision,
       "council_reference" => council_reference, 
-      "date_received" => tr.search("td")[1].inner_text,
+      "date_received" => date_received_formatted,
       "description" => tr.search("td")[2].inner_text,
       "address" => tr.search("td")[3].inner_text,
       "status" => tr.search("td")[4].inner_text,
