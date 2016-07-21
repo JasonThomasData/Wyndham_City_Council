@@ -33,9 +33,9 @@ def save_table_data(table_rows, url)
     
     if (ScraperWiki.select("* from data where `council_reference`='#{record['council_reference']}'").empty? rescue true)
       ScraperWiki.save_sqlite(['council_reference'], record)
-      puts record
-    else
-      puts "Skipping already saved record " + record['council_reference']
+      #puts record
+    #else
+      #puts "Skipping already saved record " + record['council_reference']
     end
 
   end
