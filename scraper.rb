@@ -15,7 +15,7 @@ def save_table_data(table_rows, url)
   table_rows.each_with_index do |tr, index|
 
     #The tables come with a header tr[0] and two tr at bottom tr[21], tr[22]. This function wants to access the table data only, so we skip these header and footer rows
-    if index == 0 or index <= table_tr_number-2
+    if index == 0 or index == table_tr_number-1 or index == table_tr_number-2
       next 
     end
 
@@ -51,13 +51,13 @@ save_table_data(table_rows, url)
 
 (2..page_link_number.to_i).each do |i|
   #We've already scraped the first page, so let's scrape the others using the aspnetForm
-
-  form_pagination_field = 'Page${i}'.gsub('{i}', i.to_s) #eg, Page$2
+  #aspnetForm is some fantastic Microsoft idea... using JavaScript to fill in a form for pagination. This code completes the form.
+  form_pagination_field = 'Page$i_here'.gsub('i_here', i.to_s) #eg, Page$2
   form = page.form("aspnetForm")
   form.add_field!('__EVENTARGUMENT', form_pagination_field)
   form.add_field!('__EVENTTARGET', 'ctl00$Content$cusResultsGrid$repWebGrid$ctl00$grdWebGridTabularView')
   page = agent.submit(form)
 
-  table_rows, _ignore = get_content(page, url)
+  table_rows, _ignore = get_content(page)
   save_table_data(table_rows, url)
 end
